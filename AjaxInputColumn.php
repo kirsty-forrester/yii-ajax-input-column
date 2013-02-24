@@ -11,11 +11,6 @@
 
 class AjaxInputColumn extends CDataColumn
 {
-    /**
-     * The class of the data column model, determined by $data
-     * @var string
-     */
-    private $_modelClass;
 
     /**
      * The URL to which the input value is sent via POST
@@ -25,6 +20,12 @@ class AjaxInputColumn extends CDataColumn
      * @var mixed
      */
     public $url;
+
+     /**
+     * The class of the data column model
+     * @var string
+     */
+    private $_modelClass;
 
     /**
      * Whether scripts have been registered yet or not
