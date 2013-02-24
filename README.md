@@ -1,7 +1,7 @@
 yii-ajax-input-column
 =====================
 
-Simple class for displaying CGridView columns as editable text input fields which automatically update via ajax
+Simple class for displaying CGridView columns as editable text input fields which automatically update via ajax.
 
 ## Requirements:
 - Only tested with Yii 1.1.13
@@ -30,6 +30,7 @@ Simple class for displaying CGridView columns as editable text input fields whic
     ));
 
 When you change the value of an input field, four values will be posted to the URL:
+
 1. id: the primary key of the model
 2. class: the model's class, capitalized (ignore if not needed)
 3. name: the name of the model's attribute
@@ -48,3 +49,6 @@ You can then use the values in your controller action to update the model. Here'
         $model->{$name} = $value;
         $model->update();
     }
+
+## Screencap:
+![Screencap](screencap.png)
