@@ -12,15 +12,16 @@
 class AjaxInputColumn extends CDataColumn
 {
     /**
-     * The class of the data column model
+     * The class of the data column model, determined by $data
      * @var string
      */
-    public $modelClass;
+    private $_modelClass;
 
     /**
      * The URL to which the input value is sent via POST
      * If given as a string, will be used directly
      * If given as an array, will be normalized
+     * If left blank, will default to current URL
      * @var mixed
      */
     public $url;
@@ -29,7 +30,7 @@ class AjaxInputColumn extends CDataColumn
      * Whether scripts have been registered yet or not
      * @var boolean
      */
-    public $scriptRegistered = false;
+    private $_scriptRegistered = false;
 
     /**
      * Initializes the column and attaches ajax update event
@@ -48,7 +49,7 @@ class AjaxInputColumn extends CDataColumn
      */
     protected function renderDataCellContent($row, $data)
     {
-        $this->modelClass = get_class($data);
+        $this->_modelClass = get_class($data);
 
         if($this->value !== null)
             $value = $this->evaluateExpression($this->value, array('data'=> $data, 'row'=> $row));
@@ -58,9 +59,9 @@ class AjaxInputColumn extends CDataColumn
         if($value === null){
             echo $this->grid->nullDisplay;
         }else{
-            $fieldId = $this->modelClass . '_' . strtolower($this->name) . '_' . $data->id;
+            $fieldId = $this->_modelClass . '_' . strtolower($this->name) . '_' . $data->id;
 
-            if(!$this->scriptRegistered){
+            if(!$this->_scriptRegistered){
 
                 $script = $this->registerScripts();
                 Yii::app()->clientScript->registerScript(__CLASS__ . '-ajax-input-column-' . $fieldId, "
@@ -69,7 +70,7 @@ class AjaxInputColumn extends CDataColumn
                     .on('ajaxUpdate.yiiGridView',
                     '#" . $this->grid->id."', function(){" . $script . "});
                 ");
-                $this->scriptRegistered = true; // so don't register again
+                $this->_scriptRegistered = true; // so don't register again
             }
 
             echo CHtml::textField($fieldId, $value, array(
@@ -103,7 +104,7 @@ class AjaxInputColumn extends CDataColumn
 
                 if(value != previousValue){
                     $.post(url,
-                    {id: id, name: name, value: value, class: '".$this->modelClass."'})
+                    {id: id, name: name, value: value, class: '".$this->_modelClass."'})
                     .done(function(data) {
                         $.fn.yiiGridView.update('" . $this->grid->id . "');
                         $(this).data('previous-value', value);
