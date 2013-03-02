@@ -46,7 +46,8 @@ You can then use the values in your controller action to update the model. Here'
         $value = $_POST['value'];
 
         $model = $class::model()->findByPk($id);
-        $model->{$name} = $value;
+        $p = new CHtmlPurifier();
+        $model->{$name} = $p->purify($value);
         $model->update();
     }
 
